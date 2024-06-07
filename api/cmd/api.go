@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/go-chi/chi"
+	"github.com/go-chi/cors"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 
@@ -60,6 +61,19 @@ func main() {
 
 	r := chi.NewRouter()
 
+	// CORS
+	r.Use(cors.Handler(cors.Options{
+		AllowedOrigins: []string{"http://localhost:8084"},
+		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders: append([]string{"Content-Type"},
+			supertokens.GetAllCORSHeaders()...),
+		AllowCredentials: true,
+	}))
+
+	r.Use(supertokens.Middleware)
+
+	// Routes
+
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Hello, World!"))
 	})
@@ -68,5 +82,5 @@ func main() {
 		w.Write([]byte("This is another route"))
 	})
 
-	http.ListenAndServe(":8080", r)
+	http.ListenAndServe(":3003", r)
 }
