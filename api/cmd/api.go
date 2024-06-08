@@ -11,6 +11,7 @@ import (
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 
+	"github.com/supertokens/supertokens-golang/recipe/dashboard"
 	"github.com/supertokens/supertokens-golang/recipe/emailpassword"
 	"github.com/supertokens/supertokens-golang/recipe/session"
 	"github.com/supertokens/supertokens-golang/recipe/thirdparty"
@@ -26,6 +27,7 @@ func main() {
 		fmt.Println("Error loading .env file")
 		return
 	}
+	fmt.Printf("DATABASE_URL: %s\n", os.Getenv("DATABASE_URL"))
 
 	db, err = sql.Open("postgres", os.Getenv("DATABASE_URL"))
 	if err != nil {
@@ -37,9 +39,7 @@ func main() {
 	websiteBasePath := "/auth"
 	err = supertokens.Init(supertokens.TypeInput{
 		Supertokens: &supertokens.ConnectionInfo{
-			// https://try.supertokens.com is for demo purposes. Replace this with the address of your core instance (sign up on supertokens.com), or self host a core.
-			ConnectionURI: "https://try.supertokens.com",
-			// APIKey: <API_KEY(if configured)>,
+			ConnectionURI: os.Getenv("SUPERTOKEN_CORE_SVC_URL"),
 		},
 		AppInfo: supertokens.AppInfo{
 			AppName:         "test",
@@ -52,6 +52,7 @@ func main() {
 			thirdparty.Init(&tpmodels.TypeInput{ /*TODO: See next step*/ }),
 			emailpassword.Init(nil),
 			session.Init(nil), // initializes session features
+			dashboard.Init(nil),
 		},
 	})
 
