@@ -1,9 +1,13 @@
 "use client";
 import Image from "next/image";
-import { useSessionContext } from "supertokens-auth-react/recipe/session";
+import {
+  SessionContextType,
+  signOut,
+  useSessionContext,
+} from "supertokens-auth-react/recipe/session";
 
 export default function Home() {
-  const session = useSessionContext();
+  const session: SessionContextType = useSessionContext();
 
   const sessionContent = session.loading ? (
     <div>Loading...</div>
@@ -15,6 +19,14 @@ export default function Home() {
           <br />
           {JSON.stringify(session, null, 4)}
         </p>
+        <button
+          className="bg-yellow-500 rounded-xl p-4 mt-5"
+          onClick={async () => {
+            await signOut();
+          }}
+        >
+          Loguout
+        </button>
       </div>
     </div>
   ) : (
@@ -26,6 +38,14 @@ export default function Home() {
       <div className="flex flex-col">
         <h2 className="font-bold text-lg">Session:</h2>
         {sessionContent}
+        <button
+          className="bg-gray-700 rounded-xl p-4 mt-5 w-64"
+          onClick={() => {
+            window.location.href = "/auth";
+          }}
+        >
+          Go to auth page
+        </button>
       </div>
       <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
         <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
