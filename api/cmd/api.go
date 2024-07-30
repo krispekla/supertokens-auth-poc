@@ -15,6 +15,7 @@ import (
 	"github.com/supertokens/supertokens-golang/recipe/dashboard"
 	"github.com/supertokens/supertokens-golang/recipe/emailpassword"
 	"github.com/supertokens/supertokens-golang/recipe/session"
+	"github.com/supertokens/supertokens-golang/recipe/session/sessmodels"
 	"github.com/supertokens/supertokens-golang/recipe/thirdparty"
 	"github.com/supertokens/supertokens-golang/recipe/thirdparty/tpmodels"
 	"github.com/supertokens/supertokens-golang/supertokens"
@@ -74,15 +75,22 @@ func main() {
 	}))
 
 	r.Use(supertokens.Middleware)
-
-	// Routes
-
-	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Hello, World!"))
+	// Public routes
+	r.Get("/ping", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("Live"))
 	})
 
-	r.Get("/another-route", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("This is another route"))
+	// Private routes
+	r.Group(func(pr chi.Router) {
+		pr.Get("/", func(w http.ResponseWriter, r *http.Request) {
+			w.Write([]byte("Hello, World!"))
+		})
+
+		pr.Get("/protected", session.VerifySession(&sessmodels.VerifySessionOptions{},
+			func(w http.ResponseWriter, r *http.Request) {
+				w.Write([]byte("This is another route"))
+			}))
+
 	})
 
 	http.ListenAndServe(":3003", r)
