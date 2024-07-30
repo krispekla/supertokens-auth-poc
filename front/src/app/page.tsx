@@ -10,10 +10,25 @@ import axios from "./utils/axiosInstance";
 export default function Home() {
   const session: SessionContextType = useSessionContext();
 
-
   const callProtectedRoute = async () => {
     try {
       const response = await axios.get("/protected");
+      if (response.status === 200) {
+        const data = response.data;
+        // Handle the response data here
+        console.log(data);
+      } else {
+        throw new Error("Request failed");
+      }
+    } catch (error) {
+      // Handle the error here
+      console.error(error);
+    }
+  };
+
+  const pingAPI = async () => {
+    try {
+      const response = await axios.get("/ping");
       if (response.status === 200) {
         const data = response.data;
         // Handle the response data here
@@ -70,6 +85,12 @@ export default function Home() {
             className="bg-blue-700 rounded-xl p-4 mt-5 w-64"
           >
             Call protected route
+          </button>
+          <button
+            onClick={() => pingAPI()}
+            className="bg-green-700 rounded-xl p-4 mt-5 w-64"
+          >
+            Ping API
           </button>
         </div>
       </div>
