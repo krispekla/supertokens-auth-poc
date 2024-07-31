@@ -86,18 +86,26 @@ app.use(
 
 // Configure helmet with CSP
 app.use(
-    helmet({
-      contentSecurityPolicy: {
-        directives: {
-          defaultSrc: ["'self'"],
-          scriptSrc: ["'self'", "'unsafe-inline'", "https://google.com", "https://cdn.jsdelivr.net/gh/supertokens/"],
-          imgSrc: ["https://google.com", "https://cdn.jsdelivr.net/gh/supertokens/"],
-          // Add other directives as needed
-        },
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: [
+          "'self'",
+          "'unsafe-inline'",
+          "https://google.com",
+          "https://cdn.jsdelivr.net/gh/supertokens/",
+        ],
+        imgSrc: [
+          "https://google.com",
+          "https://cdn.jsdelivr.net/gh/supertokens/",
+        ],
+        // Add other directives as needed
       },
-    })
-  );
-  
+    },
+  })
+);
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(middleware());
