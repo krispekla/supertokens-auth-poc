@@ -10,6 +10,7 @@ import { middleware } from "supertokens-node/framework/express";
 import Dashboard from "supertokens-node/recipe/dashboard";
 import Session from "supertokens-node/recipe/session";
 import ThirdParty from "supertokens-node/recipe/thirdparty";
+import UserRoles from "supertokens-node/recipe/userroles";
 
 dotenv.config();
 
@@ -71,6 +72,7 @@ supertokens.init({
       },
     }),
     Dashboard.init(),
+    UserRoles.init(),
   ],
 });
 
