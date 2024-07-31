@@ -12,12 +12,12 @@ import (
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 
-	"github.com/supertokens/supertokens-golang/recipe/dashboard"
 	"github.com/supertokens/supertokens-golang/recipe/emailpassword"
 	"github.com/supertokens/supertokens-golang/recipe/session"
 	"github.com/supertokens/supertokens-golang/recipe/session/sessmodels"
 	"github.com/supertokens/supertokens-golang/recipe/thirdparty"
 	"github.com/supertokens/supertokens-golang/recipe/thirdparty/tpmodels"
+	"github.com/supertokens/supertokens-golang/recipe/userroles"
 	"github.com/supertokens/supertokens-golang/supertokens"
 )
 
@@ -54,7 +54,7 @@ func main() {
 			thirdparty.Init(&tpmodels.TypeInput{ /*TODO: See next step*/ }),
 			emailpassword.Init(nil),
 			session.Init(nil), // initializes session features
-			dashboard.Init(nil),
+			userroles.Init(nil),
 		},
 	})
 
@@ -90,7 +90,6 @@ func main() {
 			func(w http.ResponseWriter, r *http.Request) {
 				w.Write([]byte("This is another route"))
 			}))
-
 	})
 
 	http.ListenAndServe(":3003", r)
