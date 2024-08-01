@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	"net/http"
@@ -11,6 +12,7 @@ import (
 	"github.com/go-chi/cors"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
+	"github.com/mailgun/mailgun-go/v4"
 
 	"github.com/supertokens/supertokens-golang/recipe/emailpassword"
 	"github.com/supertokens/supertokens-golang/recipe/session"
@@ -80,6 +82,17 @@ func main() {
 		w.Write([]byte("Live"))
 	})
 
+	r.Get("/mail-test", func(w http.ResponseWriter, r *http.Request) {
+		msg := r.URL.Query().Get("msg")
+		emailAdr := r.URL.Query().Get("email")
+		id, err := SendSimpleMessage(r.Context(), os.Getenv("MAILGUN_DOMAIN"), os.Getenv("MAILGUN_API_KEY"), msg, emailAdr, os.Getenv("MAILGUN_SENDER_EMAIL"))
+		if err != nil {
+			w.Write([]byte(err.Error()))
+			return
+		}
+		w.Write([]byte(fmt.Sprint("Message sent: ", id)))
+	})
+
 	// Private routes
 	r.Group(func(pr chi.Router) {
 		pr.Get("/", func(w http.ResponseWriter, r *http.Request) {
@@ -93,4 +106,16 @@ func main() {
 	})
 
 	http.ListenAndServe(":3003", r)
+}
+
+func SendSimpleMessage(ctx context.Context, domain, apiKey, msg, emailAdd, sender string) (string, error) {
+	mg := mailgun.NewMailgun(domain, apiKey)
+	m := mg.NewMessage(
+		fmt.Sprintf("Supertoken Generic <%s>", sender),
+		"Testing sp",
+		msg,
+		emailAdd,
+	)
+	_, id, err := mg.Send(ctx, m)
+	return id, err
 }
