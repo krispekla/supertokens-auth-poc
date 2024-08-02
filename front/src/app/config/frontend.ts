@@ -1,8 +1,10 @@
 import { useRouter } from "next/navigation";
 import { SuperTokensConfig } from "supertokens-auth-react/lib/build/types";
 import EmailPasswordReact from "supertokens-auth-react/recipe/emailpassword";
+import EmailVerification from "supertokens-auth-react/recipe/emailverification";
 import SessionReact from "supertokens-auth-react/recipe/session";
 import ThirdPartyReact from "supertokens-auth-react/recipe/thirdparty";
+
 import { appInfo } from "./appInfo";
 
 const routerInfo: { router?: ReturnType<typeof useRouter>; pathName?: string } =
@@ -65,6 +67,9 @@ export const frontendConfig = (): SuperTokensConfig => {
         `,
       }),
       EmailPasswordReact.init(),
+      EmailVerification.init({
+        mode: "REQUIRED", // or "OPTIONAL"
+      }),
       SessionReact.init(),
     ],
     windowHandler: (original) => ({
