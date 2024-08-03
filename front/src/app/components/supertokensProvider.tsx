@@ -15,11 +15,14 @@ export const SuperTokensProvider: React.FC<React.PropsWithChildren<{}>> = ({
   children,
 }) => {
   setRouter(useRouter(), usePathname() || window.location.pathname);
-
-  if (canHandleRoute([/* Other pre built UI */ EmailVerificationPreBuiltUI])) {
-    return getRoutingComponent([
-      /* Other pre built UI */ EmailVerificationPreBuiltUI,
-    ]);
+  if (typeof window !== "undefined") {
+    if (
+      canHandleRoute([/* Other pre built UI */ EmailVerificationPreBuiltUI])
+    ) {
+      return getRoutingComponent([
+        /* Other pre built UI */ EmailVerificationPreBuiltUI,
+      ]);
+    }
   }
 
   return <SuperTokensWrapper>{children}</SuperTokensWrapper>;
