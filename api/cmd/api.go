@@ -91,7 +91,7 @@ func main() {
 
 	// CORS
 	r.Use(cors.Handler(cors.Options{
-		AllowedOrigins: []string{"http://localhost:8084"},
+		AllowedOrigins: []string{"*"},
 		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowedHeaders: append([]string{"Content-Type"},
 			supertokens.GetAllCORSHeaders()...),
